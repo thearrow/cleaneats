@@ -8,9 +8,14 @@ gem 'jquery-rails'
 gem 'turbolinks'
 gem 'jbuilder', '~> 1.2'
 gem 'compass-rails', '~> 2.0.alpha.0'
-gem 'mongoid', '~> 4', :github=>"mongoid/mongoid"
+gem 'mongoid', '~> 4', github: 'mongoid/mongoid'
 gem 'unicorn'
+gem 'unicorn-rails'
 gem 'zurb-foundation'
+gem 'newrelic_rpm'
+gem 'hashie'
+gem 'citygrid'
+
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller', :platforms=>[:mri_19, :mri_20, :rbx]
@@ -29,5 +34,5 @@ group :test do
   gem 'capybara'
   gem 'database_cleaner', '1.0.1'
   gem 'email_spec'
-  gem 'mongoid-rspec', '>= 1.6.0', :github=>"evansagge/mongoid-rspec"
+  gem 'mongoid-rspec', '>= 1.6.0', github: 'evansagge/mongoid-rspec'
 end
