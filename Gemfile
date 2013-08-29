@@ -13,6 +13,8 @@ gem 'unicorn'
 gem 'unicorn-rails'
 gem 'zurb-foundation'
 gem 'newrelic_rpm'
+gem 'rails_12factor'
+gem 'rails_serve_static_assets'
 gem 'hashie'
 gem 'citygrid'
 
