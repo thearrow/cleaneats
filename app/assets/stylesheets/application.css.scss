@@ -12,6 +12,9 @@
  *= require foundation_and_overrides
  *= require_tree .
 */
+
+@import 'foundation-icons';
+
 .brand {
   float: left;
   padding-right: 8px;

@@ -1,3 +1,14 @@
 // Place all the styles related to the home controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+.search-icon{
+  float: right;
+  margin-right: .7em;
+  margin-top: -2.3em;
+}
+
+#map{
+  height: 600px;
+  label { width: auto; display:inline; }
+  img { max-width: none; }
+}

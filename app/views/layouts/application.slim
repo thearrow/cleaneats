@@ -1,0 +1,24 @@
+doctype
+html
+  head
+    meta[name="viewport" content="width=device-width, initial-scale=1.0"]
+    title
+      = content_for?(:title) ? yield(:title) : "Clean Eats"
+    |  <meta name="description" content="
+    = content_for?(:description) ? yield(:description) : "Clean Eats"
+    | "> 
+    = stylesheet_link_tag "application", :media => "all"
+    = javascript_include_tag "application"
+    = yield :js
+    = csrf_meta_tags
+    = yield(:head)
+  |  <body class="
+  = controller_name
+  = action_name
+  | "> 
+  #container.container
+    header
+      = render 'layouts/navigation'
+    #main[role="main"]
+      = yield
+    footer
