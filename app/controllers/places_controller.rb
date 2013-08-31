@@ -63,6 +63,14 @@ class PlacesController < ApplicationController
     end
   end
 
+  # GET /search/{params}
+  def search
+    unless params[:lat].nil? or params[:lon].nil?
+      data = Citygrid.search(params[:lat], params[:lon], 4)
+      render json: data.results.locations
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_place

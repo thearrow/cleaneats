@@ -157,4 +157,12 @@ describe PlacesController do
     end
   end
 
+  describe "/search" do
+    it "should get lat/lon results for ?lat=34.03&lon=-118.28" do
+      get :search, {:lat => 34.03, :lon => -118.28}
+      parsed_body = MultiJson.load(response.body)
+      expect(parsed_body.count).to be >= 10
+    end
+  end
+
 end

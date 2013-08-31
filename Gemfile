@@ -16,11 +16,11 @@ gem 'foundation-icons-sass-rails'
 gem 'newrelic_rpm'
 gem 'rails_12factor'
 gem 'rails_serve_static_assets'
-gem 'hashie'
-gem 'citygrid'
 gem 'slim'
 gem 'html2slim'
 gem 'multi_json'
+gem 'httparty'
+gem 'hashie'
 gem 'oj'
 
 group :development do
