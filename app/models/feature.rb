@@ -1,4 +1,4 @@
-class Features
+class Feature
   include Mongoid::Document
   field :gluten, type: Float
   field :msg, type: Float
@@ -7,4 +7,5 @@ class Features
   field :vegetarian, type: Float
   field :paleo, type: Float
   field :low_carb, type: Float
+  belongs_to :place
 end

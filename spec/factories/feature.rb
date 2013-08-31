@@ -1,7 +1,7 @@
 # Read about factories at https://github.com/thoughtbot/factory_girl
 
 FactoryGirl.define do
-  factory :features, :class => 'Features' do
+  factory :feature, :class => 'Feature' do
     gluten 1.5
     msg 1.5
     dairy 4.0

@@ -20,6 +20,8 @@ gem 'hashie'
 gem 'citygrid'
 gem 'slim'
 gem 'html2slim'
+gem 'multi_json'
+gem 'oj'
 
 group :development do
   gem 'better_errors'
