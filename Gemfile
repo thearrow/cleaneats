@@ -22,6 +22,7 @@ gem 'multi_json'
 gem 'httparty'
 gem 'hashie'
 gem 'oj'
+gem 'oauth'
 
 group :development do
   gem 'better_errors'

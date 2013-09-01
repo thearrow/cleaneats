@@ -12,7 +12,6 @@ class Citygrid
         :lon => lon,
         :radius => radius,
     })
-
-    Hashie::Mash.new(response)
+    Hashie::Mash.new(response).results.locations
   end
 end

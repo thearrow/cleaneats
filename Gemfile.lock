@@ -143,6 +143,7 @@ GEM
     newrelic_rpm (3.6.6.147)
     nokogiri (1.6.0)
       mini_portile (~> 0.5.0)
+    oauth (0.4.7)
     oj (2.1.4)
     origin (1.1.0)
     polyglot (0.3.3)
@@ -264,6 +265,7 @@ DEPENDENCIES
   mongoid-rspec (>= 1.6.0)!
   multi_json
   newrelic_rpm
+  oauth
   oj
   rails (= 4.0.0)
   rails_12factor

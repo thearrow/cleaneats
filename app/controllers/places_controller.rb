@@ -66,8 +66,11 @@ class PlacesController < ApplicationController
   # GET /search/{params}
   def search
     unless params[:lat].nil? or params[:lon].nil?
-      data = Citygrid.search(params[:lat], params[:lon], 4)
-      render json: data.results.locations
+      if params[:citygrid]
+        render json: Citygrid.search(params[:lat], params[:lon], 4)
+      else
+        render json: Yelp.search(params[:lat], params[:lon])
+      end
     end
   end
 
