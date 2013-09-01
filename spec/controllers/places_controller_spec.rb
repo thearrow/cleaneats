@@ -23,7 +23,8 @@ describe PlacesController do
   # This should return the minimal set of attributes required to create a valid
   # Place. As you add validations to Place, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) { { "id_citygrid" => "MyString" } }
+  let(:valid_attributes) { { 'id_citygrid' => "MyString",
+                             'id_yelp' => "yelp-id" } }
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
@@ -40,8 +41,8 @@ describe PlacesController do
 
   describe "GET show" do
     it "assigns the requested place as @place" do
-      place = Place.create! valid_attributes
-      get :show, {:id => place.to_param}, valid_session
+      place = Place.create valid_attributes
+      get :show, {:id => place.id_yelp}, valid_session
       assigns(:place).should eq(place)
     end
   end

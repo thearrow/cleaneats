@@ -32,8 +32,4 @@ class Place
         end
       end
   end
-
-  def self.find_by_id(id)
-    return Place.find_by(:_id => id)
-  end
 end

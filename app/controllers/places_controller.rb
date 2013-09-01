@@ -1,5 +1,5 @@
 class PlacesController < ApplicationController
-  before_action :set_place, only: [:show, :edit, :update, :destroy]
+  before_action :set_place, only: [:edit, :update, :destroy]
 
   # GET /places
   # GET /places.json
@@ -11,7 +11,8 @@ class PlacesController < ApplicationController
   # GET /places/1
   # GET /places/1.json
   def show
-    render json: Place.find_by_id(params[:id])
+    @place = Place.find_by(id_yelp: params[:id])
+    render json: @place
   end
 
   # GET /places/new

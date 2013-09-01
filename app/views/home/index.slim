@@ -1,0 +1,23 @@
+-content_for :js, javascript_include_tag('http://maps.google.com/maps/api/js?sensor=false')
+
+#titleblock.row.text-center
+  #location-alert.alert-box.alert[style="display: none" data-alert]
+    | Couldn't get your location!
+    a.close[href="#"]
+      | ×
+  h1
+    | Clean Eats
+  p
+    | Make it easier to eat out with dietary restrictions
+.row.text-center.collapse
+  .small-9.columns
+    input[type="text" placeholder="City, Neighborhood, Zip..."]
+    i.fi-magnifying-glass.search-icon
+  .small-3.columns
+    #get-location-button.small.button.secondary
+      i.fi-compass
+      |  Current Location
+.row.text-center
+  .small-9.columns
+    #map
+  .small-3.columns
