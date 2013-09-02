@@ -4,15 +4,15 @@
     a.close[href="#"]
       | ×
   h1
-    | Clean Eats {{yourLoc}}
+    | Clean Eats
   p
-    | Make it easier to eat out with dietary restrictions
-.row.text-center.collapse
+    | Make dining out with dietary restrictions easier
+.row.text-center.collapse.search
   .small-9.columns
-    input[type="text" placeholder="City, Neighborhood, Zip..." ng-model="yourLoc"]
-    i.fi-magnifying-glass.search-icon
+    input[type="text" placeholder="Address, City, Neighborhood, Zip..." ng-model="yourLoc"]
+    i.fi-magnifying-glass
   .small-3.columns
-    .small.button.secondary[ng-click="getLocation()"]
+    a.button.prefix[href="#" ng-click="getLocation()"]
       i.fi-compass
       |  Current Location
 .row.text-center

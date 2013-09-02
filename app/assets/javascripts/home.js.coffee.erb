@@ -1,9 +1,7 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://coffeescript.org/
-window.CleanEats = angular.module("cleanEats", ["ngResource", "leaflet-directive"])
+'use strict'
 
-CleanEats.controller "cleanCtrl", ['$scope', ($scope) ->
+angular.module('cleanEats', ["ngResource", "leaflet-directive"])
+.controller 'cleanCtrl', ($scope) ->
     $scope.isSearching = false
     $scope.position = {
             lat: 51.505,
@@ -44,4 +42,4 @@ CleanEats.controller "cleanCtrl", ['$scope', ($scope) ->
         $('#location-alert').css('display', 'block')
     $scope.getLocation = ->
         navigator.geolocation.getCurrentPosition($scope.showMap, $scope.showError)
-    ]
+
