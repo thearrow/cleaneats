@@ -1,23 +1,22 @@
--content_for :js, javascript_include_tag('http://maps.google.com/maps/api/js?sensor=false')
-
-#titleblock.row.text-center
+.row.text-center[ng-hide="isSearching"]
   #location-alert.alert-box.alert[style="display: none" data-alert]
     | Couldn't get your location!
     a.close[href="#"]
       | ×
   h1
-    | Clean Eats
+    | Clean Eats {{yourLoc}}
   p
     | Make it easier to eat out with dietary restrictions
 .row.text-center.collapse
   .small-9.columns
-    input[type="text" placeholder="City, Neighborhood, Zip..."]
+    input[type="text" placeholder="City, Neighborhood, Zip..." ng-model="yourLoc"]
     i.fi-magnifying-glass.search-icon
   .small-3.columns
-    #get-location-button.small.button.secondary
+    .small.button.secondary[ng-click="getLocation()"]
       i.fi-compass
       |  Current Location
 .row.text-center
   .small-9.columns
-    #map
+    #map[ng-show="isSearching"]
+      leaflet[width="100%" height=480 center="position" defaults="mapDefaults" markers="markers"]
   .small-3.columns

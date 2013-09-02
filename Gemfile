@@ -23,6 +23,9 @@ gem 'httparty'
 gem 'hashie'
 gem 'oj'
 gem 'oauth'
+gem 'angularjs-rails'
+gem 'ngmin-rails'
+gem 'leaflet-rails'
 
 group :development do
   gem 'better_errors'

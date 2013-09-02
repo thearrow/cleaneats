@@ -1,0 +1,47 @@
+# Place all the behaviors and hooks related to the matching controller here.
+# All this logic will automatically be available in application.js.
+# You can use CoffeeScript in this file: http://coffeescript.org/
+window.CleanEats = angular.module("cleanEats", ["ngResource", "leaflet-directive"])
+
+CleanEats.controller "cleanCtrl", ['$scope', ($scope) ->
+    $scope.isSearching = false
+    $scope.position = {
+            lat: 51.505,
+            lng: -0.09,
+            zoom: 10
+    }
+    $scope.markers = {}
+    $scope.supportsGeo = navigator.geolocation
+    $scope.mapDefaults = {
+        tileLayer: "http://{s}.tile.cloudmade.com/<%= ENV['CLOUDMADE_API_KEY'] %>/997/256/{z}/{x}/{y}.png",
+        tileLayerOptions:
+            opacity: 0.9,
+            detectRetina: true,
+            reuseTiles: true,
+            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors,
+                      <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>,
+                      Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+        maxZoom: 18,
+        scrollWheelZoom: true
+    }
+    $scope.showPositionMarker = ->
+        $scope.$apply(
+            $scope.markers.current_pos =
+                lat: $scope.position.lat,
+                lng: $scope.position.lng,
+                message: "Current Location"
+            $scope.isSearching = true
+        )
+    $scope.showMap = (position) ->
+        $scope.$apply(
+            $scope.position =
+                lat: position.coords.latitude
+                lng: position.coords.longitude
+                zoom: 15
+        )
+        $scope.showPositionMarker()
+    $scope.showErorr = ->
+        $('#location-alert').css('display', 'block')
+    $scope.getLocation = ->
+        navigator.geolocation.getCurrentPosition($scope.showMap, $scope.showError)
+    ]

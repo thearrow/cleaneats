@@ -45,6 +45,7 @@ GEM
       thread_safe (~> 0.1)
       tzinfo (~> 0.3.37)
     addressable (2.3.5)
+    angularjs-rails (1.0.7)
     arel (4.0.0)
     atomic (1.1.13)
     better_errors (0.9.0)
@@ -125,6 +126,7 @@ GEM
     kgio (2.8.0)
     launchy (2.3.0)
       addressable (~> 2.3)
+    leaflet-rails (0.6.2)
     listen (1.3.0)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
@@ -141,6 +143,8 @@ GEM
     multi_json (1.7.9)
     multi_xml (0.5.5)
     newrelic_rpm (3.6.6.147)
+    ngmin-rails (0.4.0)
+      rails (>= 3.1)
     nokogiri (1.6.0)
       mini_portile (~> 0.5.0)
     oauth (0.4.7)
@@ -244,6 +248,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  angularjs-rails
   better_errors
   binding_of_caller
   capybara
@@ -261,10 +266,12 @@ DEPENDENCIES
   httparty
   jbuilder (~> 1.2)
   jquery-rails
+  leaflet-rails
   mongoid (~> 4)!
   mongoid-rspec (>= 1.6.0)!
   multi_json
   newrelic_rpm
+  ngmin-rails
   oauth
   oj
   rails (= 4.0.0)

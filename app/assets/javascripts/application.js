@@ -14,6 +14,11 @@
 //= require jquery_ujs
 //= require foundation
 //= require turbolinks
+//= require angular
+//= require angular-resource
+//= require angular-leaflet-directive
+//= require leaflet
 //= require_tree .
+
 
 $(function(){ $(document).foundation(); });
