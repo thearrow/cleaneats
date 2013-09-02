@@ -11,10 +11,11 @@
  *= require_self
  *= require foundation_and_overrides
  *= require leaflet
+ *= require leaflet.awesome-markers
  *= require_tree .
 */
 
-@import 'foundation-icons';
+@import "font-awesome";
 
 .brand {
   float: left;

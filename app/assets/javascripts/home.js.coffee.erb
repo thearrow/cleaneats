@@ -42,7 +42,11 @@ angular.module('cleanEats', ["ngResource", "leaflet-directive"])
             [current_pos =
                 lat: $scope.center.lat,
                 lng: $scope.center.lng,
-                message: "Current Location"]
+                message: "Current Location",
+                icon: L.AwesomeMarkers.icon
+                    icon: 'male'
+                    color: 'red'
+            ]
         $scope.isSearching = true
 
     $scope.showMap = (position) ->

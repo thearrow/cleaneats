@@ -12,7 +12,7 @@ gem 'mongoid', '~> 4', github: 'mongoid/mongoid'
 gem 'unicorn'
 gem 'unicorn-rails'
 gem 'zurb-foundation'
-gem 'foundation-icons-sass-rails'
+gem "font-awesome-rails"
 gem 'newrelic_rpm'
 gem 'rails_12factor'
 gem 'rails_serve_static_assets'

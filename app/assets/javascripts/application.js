@@ -18,6 +18,7 @@
 //= require angular-resource
 //= require angular-leaflet-directive
 //= require leaflet
+//= require leaflet.awesome-markers
 //= require_tree .
 
 

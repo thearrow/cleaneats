@@ -1,8 +1,5 @@
-// Place all the styles related to the home controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
 .search {
-  i.fi-magnifying-glass {
+  i.icon-search {
     float: right;
     margin-right: .7em;
     margin-top: -2.3em;
@@ -13,4 +10,9 @@
       color: #ffffff;
     }
   }
+}
+
+.row.map {
+  max-width: 100em;
+  margin-top: 2em;
 }

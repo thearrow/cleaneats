@@ -12,12 +12,12 @@
   .small-9.columns
     form[ng-submit="doSearch()"]
       input[type="text" placeholder="Address, City, Neighborhood, Zip..." ng-model="locationText"]
-      i.fi-magnifying-glass
+      i.icon-search
   .small-3.columns
     a.button.prefix[href="" ng-click="getLocation()"]
-      i.fi-compass
+      i.icon-location-arrow
       |  Current Location
-.row.text-center
+.row.text-center.map
   .large-9.columns
     #map[ng-show="isSearching"]
       leaflet[width="100%" height=480 center="center" defaults="mapDefaults" markers="markers"]
