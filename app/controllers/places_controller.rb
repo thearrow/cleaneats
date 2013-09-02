@@ -73,6 +73,10 @@ class PlacesController < ApplicationController
         render json: Citygrid.search(params[:lat], params[:lon], 4)
       end
     end
+
+    unless params[:where].nil?
+      render json: Citygrid.where(params[:where])
+    end
   end
 
   private

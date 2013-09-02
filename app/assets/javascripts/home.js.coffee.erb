@@ -1,15 +1,17 @@
 'use strict'
 
 angular.module('cleanEats', ["ngResource", "leaflet-directive"])
-.controller 'cleanCtrl', ($scope) ->
+.controller 'cleanCtrl', ($scope, $http) ->
     $scope.isSearching = false
-    $scope.position = {
+    $scope.locationError = false
+    angular.extend $scope,
+        markers : []
+        center:
             lat: 51.505,
             lng: -0.09,
             zoom: 10
-    }
-    $scope.markers = {}
-    $scope.supportsGeo = navigator.geolocation
+    $scope.apiUrl = "<%= ENV['ROOT_URL'] %>"
+    $scope.locationText = ""
     $scope.mapDefaults = {
         tileLayer: "http://{s}.tile.cloudmade.com/<%= ENV['CLOUDMADE_API_KEY'] %>/997/256/{z}/{x}/{y}.png",
         tileLayerOptions:
@@ -22,24 +24,32 @@ angular.module('cleanEats', ["ngResource", "leaflet-directive"])
         maxZoom: 18,
         scrollWheelZoom: true
     }
-    $scope.showPositionMarker = ->
-        $scope.$apply(
-            $scope.markers.current_pos =
-                lat: $scope.position.lat,
-                lng: $scope.position.lng,
-                message: "Current Location"
-            $scope.isSearching = true
-        )
-    $scope.showMap = (position) ->
-        $scope.$apply(
-            $scope.position =
-                lat: position.coords.latitude
-                lng: position.coords.longitude
-                zoom: 15
-        )
-        $scope.showPositionMarker()
-    $scope.showErorr = ->
-        $('#location-alert').css('display', 'block')
-    $scope.getLocation = ->
-        navigator.geolocation.getCurrentPosition($scope.showMap, $scope.showError)
+    $scope.doSearch = ->
+        $http.get("/places/search?where=" + $scope.locationText).success($scope.searchSuccess);
 
+    $scope.searchSuccess = (data, status, headers, config) ->
+        $scope.setCenter(parseFloat(data.regions[0].latitude), parseFloat(data.regions[0].longitude))
+
+    $scope.setCenter = (lat, lng) ->
+        $scope.center =
+            lat: lat
+            lng: lng
+            zoom: 14
+        $scope.showPositionMarker()
+
+    $scope.showPositionMarker = ->
+        $scope.markers =
+            [current_pos =
+                lat: $scope.center.lat,
+                lng: $scope.center.lng,
+                message: "Current Location"]
+        $scope.isSearching = true
+
+    $scope.showMap = (position) ->
+        $scope.$apply($scope.setCenter(position.coords.latitude, position.coords.longitude))
+
+    $scope.showErorr = ->
+        $scope.$apply($scope.locationError = true)
+
+    $scope.getLocation = ->
+        navigator.geolocation.getCurrentPosition($scope.showMap, $scope.showErorr)
