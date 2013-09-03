@@ -12,16 +12,16 @@ class Citygrid
         :lon => lon,
         :radius => radius,
     })
-    Hashie::Mash.new(response).results.locations
+    response['results']
   end
 
-  def self.where(query)
+  def self.search_text(query)
     response = get('/search/where', :query => {
         :type => 'restaurant',
         :format => 'json',
         :publisher => ENV['CITYGRID_API_KEY'],
         :where => query
     })
-    Hashie::Mash.new(response).results
+    response['results']
   end
 end

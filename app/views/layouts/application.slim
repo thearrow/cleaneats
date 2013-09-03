@@ -9,16 +9,15 @@ html
     | "> 
     = stylesheet_link_tag "application", :media => "all"
     = javascript_include_tag "application"
-    = yield :js
     = csrf_meta_tags
     = yield(:head)
   |  <body class="
   = controller_name
   = action_name
   | "> 
-  #container.container[ng-app="cleanEats"]
+  #container.container
     header
       = render 'layouts/navigation'
-    #main[role="main" ng-controller="cleanCtrl"]
+    #main[role="main"]
       = yield
     footer

@@ -2,17 +2,16 @@
 
 angular.module('cleanEats', ["ngResource", "leaflet-directive"])
 .controller 'cleanCtrl', ($scope, $http) ->
-    $scope.isSearching = false
-    $scope.locationError = false
     angular.extend $scope,
         markers : []
         center:
             lat: 51.505,
             lng: -0.09,
             zoom: 10
-    $scope.apiUrl = "<%= ENV['ROOT_URL'] %>"
+    $scope.isSearching = false
+    $scope.locationError = false
     $scope.locationText = ""
-    $scope.mapDefaults = {
+    $scope.mapDefaults =
         tileLayer: "http://{s}.tile.cloudmade.com/<%= ENV['CLOUDMADE_API_KEY'] %>/997/256/{z}/{x}/{y}.png",
         tileLayerOptions:
             opacity: 0.9,
@@ -23,18 +22,40 @@ angular.module('cleanEats', ["ngResource", "leaflet-directive"])
                       Imagery © <a href="http://cloudmade.com">CloudMade</a>',
         maxZoom: 18,
         scrollWheelZoom: true
-    }
-    $scope.doSearch = ->
-        $http.get("/places/search?where=" + $scope.locationText).success($scope.searchSuccess);
 
-    $scope.searchSuccess = (data, status, headers, config) ->
+    $scope.doTextSearch = ->
+        $http.get("/places/search?where=" + $scope.locationText).success($scope.textSearchSuccess);
+
+    $scope.doLatLngSearch = ->
+        $http.get("/places/search?lat=" + $scope.center.lat + "&lng=" + $scope.center.lng).success($scope.latLngSearchSuccess);
+
+    $scope.textSearchSuccess = (data, status, headers, config) ->
         $scope.setCenter(parseFloat(data.regions[0].latitude), parseFloat(data.regions[0].longitude))
+        $scope.showLocationMarkers(data.locations)
+
+    $scope.latLngSearchSuccess = (data, status, headers, config) ->
+        $scope.showLocationMarkers(data.locations)
+
+    $scope.showLocationMarkers = (locations) ->
+        angular.forEach locations, (restaurant, key) ->
+            $scope.markers.push key =
+                lat: restaurant.latitude
+                lng: restaurant.longitude
+                message: restaurant.name
+                icon: L.AwesomeMarkers.icon getIcon(restaurant)
+
+    getIcon = (location) ->
+        if location.sample_categories.search('Bars & Clubs') > -1
+            return icon: 'glass', color: 'blue'
+        if location.sample_categories.search('Coffeehouses') > -1
+            return icon: 'coffee', color: 'cadetblue'
+        return icon: 'food', color: 'darkblue'
 
     $scope.setCenter = (lat, lng) ->
         $scope.center =
             lat: lat
             lng: lng
-            zoom: 14
+            zoom: 15
         $scope.showPositionMarker()
 
     $scope.showPositionMarker = ->
@@ -49,11 +70,14 @@ angular.module('cleanEats', ["ngResource", "leaflet-directive"])
             ]
         $scope.isSearching = true
 
-    $scope.showMap = (position) ->
-        $scope.$apply($scope.setCenter(position.coords.latitude, position.coords.longitude))
+    $scope.geoSuccess = (position) ->
+        $scope.$apply(
+            $scope.setCenter(position.coords.latitude, position.coords.longitude)
+            $scope.doLatLngSearch()
+        )
 
-    $scope.showErorr = ->
+    $scope.geoError = ->
         $scope.$apply($scope.locationError = true)
 
     $scope.getLocation = ->
-        navigator.geolocation.getCurrentPosition($scope.showMap, $scope.showErorr)
+        navigator.geolocation.getCurrentPosition($scope.geoSuccess, $scope.geoError)

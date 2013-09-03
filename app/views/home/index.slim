@@ -1,24 +1,25 @@
-.row.text-center[ng-hide="isSearching"]
-  div[ng-show="locationError"]
-    .alert-box.alert[data-alert]
-      | Couldn't get your location!
-      a.close[href="#"]
-        | ×
-  h1
-    | Clean Eats
-  p
-    | Make dining out with dietary restrictions easier
-.row.text-center.collapse.search
-  .small-9.columns
-    form[ng-submit="doSearch()"]
-      input[type="text" placeholder="Address, City, Neighborhood, Zip..." ng-model="locationText"]
-      i.icon-search
-  .small-3.columns
-    a.button.prefix[href="" ng-click="getLocation()"]
-      i.icon-location-arrow
-      |  Current Location
-.row.text-center.map
-  .large-9.columns
-    #map[ng-show="isSearching"]
-      leaflet[width="100%" height=480 center="center" defaults="mapDefaults" markers="markers"]
-  .large-3.columns
+div[ng-app="cleanEats" ng-controller="cleanCtrl"]
+  .row.text-center[ng-hide="isSearching"]
+    div[ng-show="locationError" ng-cloak]
+      .alert-box.alert[data-alert]
+        | Couldn't get your location!
+        a.close[href="#"]
+          | ×
+    h1
+      | Clean Eats
+    p
+      | Make dining out with dietary restrictions easier
+  .row.text-center.collapse.search
+    .small-9.columns
+      form[ng-submit="doTextSearch()"]
+        input[type="text" placeholder="Address, City, Neighborhood, Zip..." ng-model="locationText"]
+        i.icon-search
+    .small-3.columns
+      a.button.prefix[href="" ng-click="getLocation()"]
+        i.icon-location-arrow
+        |  Current Location
+  .row.text-center.map
+    .large-9.columns
+      #map[ng-show="isSearching"]
+        leaflet[width="100%" height=480 center="center" defaults="mapDefaults" markers="markers"]
+    .large-3.columns
