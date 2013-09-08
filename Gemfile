@@ -26,6 +26,7 @@ gem 'oauth'
 gem 'angularjs-rails'
 gem 'ngmin-rails'
 gem 'leaflet-rails'
+gem 'geocoder'
 
 group :development do
   gem 'better_errors'

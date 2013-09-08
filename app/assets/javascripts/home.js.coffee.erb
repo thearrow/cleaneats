@@ -30,25 +30,31 @@ angular.module('cleanEats', ["ngResource", "leaflet-directive"])
         $http.get("/places/search?lat=" + $scope.center.lat + "&lng=" + $scope.center.lng).success($scope.latLngSearchSuccess);
 
     $scope.textSearchSuccess = (data, status, headers, config) ->
-        $scope.setCenter(parseFloat(data.regions[0].latitude), parseFloat(data.regions[0].longitude))
+        $scope.setCenter(parseFloat(data.lat), parseFloat(data.lng))
         $scope.showLocationMarkers(data.locations)
 
     $scope.latLngSearchSuccess = (data, status, headers, config) ->
         $scope.showLocationMarkers(data.locations)
 
     $scope.showLocationMarkers = (locations) ->
-        angular.forEach locations, (restaurant, key) ->
+        angular.forEach locations, (r, key) ->
             $scope.markers.push key =
-                lat: restaurant.latitude
-                lng: restaurant.longitude
-                message: restaurant.name
-                icon: L.AwesomeMarkers.icon getIcon(restaurant)
+                lat: parseFloat(r.latitude)
+                lng: parseFloat(r.longitude)
+                message:
+                    "
+                    <h3>#{r.name}</h3>
+                    <p>
+                        <img src=#{r.rating_img_url}><br/>
+                        (#{r.review_count} reviews)<br/>
+                        <a href=#{r.url}>
+                         <img src='http://s3-media3.ak.yelpcdn.com/assets/2/www/img/65526d1a519b/developers/Powered_By_Yelp_Red.png'>
+                        </a>
+                    </p>
+                    "
+                icon: L.AwesomeMarkers.icon getIcon(r)
 
     getIcon = (location) ->
-        if location.sample_categories.search('Bars & Clubs') > -1
-            return icon: 'glass', color: 'blue'
-        if location.sample_categories.search('Coffeehouses') > -1
-            return icon: 'coffee', color: 'cadetblue'
         return icon: 'food', color: 'darkblue'
 
     $scope.setCenter = (lat, lng) ->

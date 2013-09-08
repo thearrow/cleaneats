@@ -3,6 +3,8 @@ class Place
   field :id_citygrid, type: String
   field :id_yelp, type: String
   field :id_google, type: String
+  field :latitude, type: String
+  field :longitude, type: String
   embeds_one :feature, autobuild: true
   has_many :features, after_add: :average_features
 

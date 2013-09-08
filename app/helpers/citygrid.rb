@@ -12,7 +12,7 @@ class Citygrid
         :lon => lon,
         :radius => radius,
     })
-    response['results']
+    Hashie::Mash.new(response['results'])
   end
 
   def self.search_text(query)
@@ -22,6 +22,6 @@ class Citygrid
         :publisher => ENV['CITYGRID_API_KEY'],
         :where => query
     })
-    response['results']
+    Hashie::Mash.new(response['results'])
   end
 end

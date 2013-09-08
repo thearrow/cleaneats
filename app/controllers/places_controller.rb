@@ -67,19 +67,39 @@ class PlacesController < ApplicationController
   # GET /search/{params}
   def search
     unless params[:lat].nil? or params[:lng].nil?
-      if params[:yelp]
-        render json: Yelp.search(params[:lat], params[:lng])
-      else
-        render json: Citygrid.search(params[:lat], params[:lng], 50)
-      end
+      @results = {:locations => Yelp.search(params[:lat], params[:lng])}
+      get_lat_lngs()
+      render json: @results
     end
 
     unless params[:where].nil?
-      render json: Citygrid.search_text(params[:where])
+      @results = {:locations => Yelp.search_text(params[:where])}
+      center = Geocoder.search(params[:where]).first
+      @results[:lat] = center.latitude.to_s
+      @results[:lng] = center.longitude.to_s
+      get_lat_lngs()
+      render json: @results
     end
   end
 
-  private
+
+private
+    def get_lat_lngs
+      @results[:locations].each do |r|
+        place = Place.find_or_create_by(id_yelp: r.id)
+        if place.latitude.nil? or place.longitude.nil?
+          geo = Geocoder.search("#{r.location.address.first} #{r.location.city} #{r.location.state_code} #{r.location.postal_code}").first
+          unless geo.nil?
+            place.latitude = geo.latitude.to_s
+            place.longitude = geo.longitude.to_s
+          end
+        end
+        r.latitude = place.latitude
+        r.longitude = place.longitude
+        place.save!
+      end
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_place
       @place = Place.find(params[:id])
