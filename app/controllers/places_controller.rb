@@ -85,18 +85,20 @@ class PlacesController < ApplicationController
 
 private
     def get_lat_lngs
-      @results[:locations].each do |r|
-        place = Place.find_or_create_by(id_yelp: r.id)
-        if place.latitude.nil? or place.longitude.nil?
-          geo = Geocoder.search("#{r.location.address.first} #{r.location.city} #{r.location.state_code} #{r.location.postal_code}").first
-          unless geo.nil?
-            place.latitude = geo.latitude.to_s
-            place.longitude = geo.longitude.to_s
+      unless @results[:locations].nil?
+        @results[:locations].each do |r|
+          place = Place.find_or_create_by(id_yelp: r.id)
+          if place.latitude.nil? or place.longitude.nil?
+            geo = Geocoder.search("#{r.location.address.first} #{r.location.city} #{r.location.state_code} #{r.location.postal_code}").first
+            unless geo.nil?
+              place.latitude = geo.latitude.to_s
+              place.longitude = geo.longitude.to_s
+            end
           end
+          r.latitude = place.latitude
+          r.longitude = place.longitude
+          place.save!
         end
-        r.latitude = place.latitude
-        r.longitude = place.longitude
-        place.save!
       end
     end
 

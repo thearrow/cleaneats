@@ -9,7 +9,8 @@ angular.module('cleanEats', ["ngResource", "leaflet-directive"])
             lng: -0.09,
             zoom: 10
     $scope.isSearching = false
-    $scope.locationError = false
+    $scope.isLoading = false
+    $scope.isLocationError = false
     $scope.locationText = ""
     $scope.mapDefaults =
         tileLayer: "http://{s}.tile.cloudmade.com/<%= ENV['CLOUDMADE_API_KEY'] %>/997/256/{z}/{x}/{y}.png",
@@ -24,16 +25,27 @@ angular.module('cleanEats', ["ngResource", "leaflet-directive"])
         scrollWheelZoom: true
 
     $scope.doTextSearch = ->
-        $http.get("/places/search?where=" + $scope.locationText).success($scope.textSearchSuccess);
+        $scope.isLoading = true
+        $http.get("/places/search?where=" + $scope.locationText).success($scope.textSearchSuccess)
 
     $scope.doLatLngSearch = ->
-        $http.get("/places/search?lat=" + $scope.center.lat + "&lng=" + $scope.center.lng).success($scope.latLngSearchSuccess);
+        $scope.isLoading = true
+        $http.get("/places/search?lat=" + $scope.center.lat + "&lng=" + $scope.center.lng).success($scope.latLngSearchSuccess)
+
+    $scope.redoSearch = ->
+        $scope.showCurrentPositionMarker()
+        $scope.doLatLngSearch()
 
     $scope.textSearchSuccess = (data, status, headers, config) ->
-        $scope.setCenter(parseFloat(data.lat), parseFloat(data.lng))
-        $scope.showLocationMarkers(data.locations)
+        $scope.isLoading = false
+        if data.locations.length > 0
+            $scope.setCenter(parseFloat(data.lat), parseFloat(data.lng))
+            $scope.showLocationMarkers(data.locations)
+        else
+            $scope.isLocationError = true
 
     $scope.latLngSearchSuccess = (data, status, headers, config) ->
+        $scope.isLoading = false
         $scope.showLocationMarkers(data.locations)
 
     $scope.showLocationMarkers = (locations) ->
@@ -62,9 +74,9 @@ angular.module('cleanEats', ["ngResource", "leaflet-directive"])
             lat: lat
             lng: lng
             zoom: 15
-        $scope.showPositionMarker()
+        $scope.showCurrentPositionMarker()
 
-    $scope.showPositionMarker = ->
+    $scope.showCurrentPositionMarker = ->
         $scope.markers =
             [current_pos =
                 lat: $scope.center.lat,
@@ -83,7 +95,7 @@ angular.module('cleanEats', ["ngResource", "leaflet-directive"])
         )
 
     $scope.geoError = ->
-        $scope.$apply($scope.locationError = true)
+        $scope.$apply($scope.isLocationError = true)
 
     $scope.getLocation = ->
         navigator.geolocation.getCurrentPosition($scope.geoSuccess, $scope.geoError)

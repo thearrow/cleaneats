@@ -1,18 +1,25 @@
+a{
+  &:visited {
+    color: #ffffff !important;
+  }
+}
+
 .search {
   i.icon-search {
     float: right;
     margin-right: .7em;
     margin-top: -2.3em;
   }
-
-  a{
-    &:visited {
-      color: #ffffff;
-    }
-  }
 }
 
 .row.map {
   max-width: 100em;
   margin-top: 2em;
+}
+
+.alert-holder{
+  text-align: center;
+  width: 100%;
+  margin: auto;
+  height: 30px;
 }
