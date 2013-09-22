@@ -24,6 +24,16 @@ angular.module('cleanEats', ["ngResource", "leaflet-directive"])
         maxZoom: 18,
         scrollWheelZoom: true
 
+    #bind event to create star ratings on marker click
+    $scope.$on 'leafletDirectiveMap.popupopen', (event) ->
+        $('#rating-gluten').raty()
+        $('#rating-msg').raty()
+        $('#rating-dairy').raty()
+        $('#rating-vegan').raty()
+        $('#rating-vegetarian').raty()
+        $('#rating-paleo').raty()
+        $('#rating-lowcarb').raty()
+
     $scope.doTextSearch = ->
         $scope.isLoading = true
         $http.get("/places/search?where=" + $scope.locationText).success($scope.textSearchSuccess)
@@ -57,12 +67,24 @@ angular.module('cleanEats', ["ngResource", "leaflet-directive"])
                     "
                     <h3>#{r.name}</h3>
                     <p>
-                        <img src=#{r.rating_img_url}><br/>
-                        (#{r.review_count} reviews)<br/>
+                        <img src=#{r.rating_img_url}>(#{r.review_count} reviews)<br/>
                         <a href=#{r.url}>
                          <img src='http://s3-media3.ak.yelpcdn.com/assets/2/www/img/65526d1a519b/developers/Powered_By_Yelp_Red.png'>
                         </a>
                     </p>
+                    <div style='width:220px; height:140px;'>
+                        <div class='ratings-left' style='float:left; width:50%;'>
+                            Paleo: <div id='rating-paleo'></div>
+                            Low-Carb: <div id='rating-lowcarb'></div>
+                            Vegetarian: <div id='rating-vegetarian'></div>
+                            Vegan: <div id='rating-vegan'></div>
+                        </div>
+                        <div class='ratings-right' style='float:right; width:50%;'>
+                            Gluten-Free: <div id='rating-gluten'></div>
+                            MSG-Free: <div id='rating-msg'></div>
+                            Dairy-Free: <div id='rating-dairy'></div>
+                        </div>
+                    </div>
                     "
                 icon: L.AwesomeMarkers.icon getIcon(r)
 
@@ -94,8 +116,9 @@ angular.module('cleanEats', ["ngResource", "leaflet-directive"])
             $scope.doLatLngSearch()
         )
 
-    $scope.geoError = ->
+    $scope.geoError = (error) ->
+        console.log(error)
         $scope.$apply($scope.isLocationError = true)
 
     $scope.getLocation = ->
-        navigator.geolocation.getCurrentPosition($scope.geoSuccess, $scope.geoError)
+        navigator.geolocation.getCurrentPosition($scope.geoSuccess, $scope.geoError, {enableHighAccuracy: true})
