@@ -19,10 +19,15 @@ nav.top-bar
           | Main Item 2
     ul.right
       li.divider.show-for-small
-      li
-        a[href="#"]
-          | Settings
-      li.divider.show-for-small
+      - if current_user
+        li.user-image
+          img[src="#{current_user.image_url}"]
+        li
+          a
+            | #{current_user.name}
       li.has-form
-        a.button[href="#"]
-          | Login With Facebook
+        - if current_user
+          = link_to "Logout", signout_path, id: 'sign_out', class: 'button'
+        - else
+          = link_to "Login With Facebook", "/auth/facebook", id: 'sign_in', class: 'button'
+

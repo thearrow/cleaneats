@@ -27,6 +27,7 @@ gem 'angularjs-rails'
 gem 'ngmin-rails'
 gem 'leaflet-rails'
 gem 'geocoder'
+gem 'omniauth-facebook'
 
 group :development do
   gem 'better_errors'

@@ -68,7 +68,7 @@ class PlacesController < ApplicationController
   def search
     unless params[:lat].nil? or params[:lng].nil?
       @results = {:locations => Yelp.search(params[:lat], params[:lng])}
-      get_lat_lngs()
+      get_latlng_and_features()
       render json: @results
     end
 
@@ -77,32 +77,39 @@ class PlacesController < ApplicationController
       center = Geocoder.search(params[:where]).first
       @results[:lat] = center.latitude.to_s
       @results[:lng] = center.longitude.to_s
-      get_lat_lngs()
+      get_latlng_and_features()
       render json: @results
     end
   end
 
 
 private
-    def get_lat_lngs
+    def get_latlng_and_features
       unless @results[:locations].nil?
         @results[:locations].each do |r|
           place = Place.find_or_create_by(id_yelp: r.id)
           if place.latitude.nil? or place.longitude.nil?
-            geo = Geocoder.search("#{r.location.address.first} #{r.location.city} #{r.location.state_code} #{r.location.postal_code}").first
-            unless geo.nil?
-              place.latitude = geo.latitude.to_s
-              place.longitude = geo.longitude.to_s
-            end
+            geocode_address(place, r)
           end
+          #add latitude, longitude, and features to response object
           r.latitude = place.latitude
           r.longitude = place.longitude
-          place.save!
+          r.features = place.features
         end
       end
     end
 
-    # Use callbacks to share common setup or constraints between actions.
+  def geocode_address(place, r)
+    #geocode the restaurant address and save lat&lng to database
+    geo = Geocoder.search("#{r.location.address.first} #{r.location.city} #{r.location.state_code} #{r.location.postal_code}").first
+    unless geo.nil?
+      place.latitude = geo.latitude.to_s
+      place.longitude = geo.longitude.to_s
+      place.save!
+    end
+  end
+
+  # Use callbacks to share common setup or constraints between actions.
     def set_place
       @place = Place.find(params[:id])
     end
