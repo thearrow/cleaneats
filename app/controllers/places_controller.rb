@@ -64,7 +64,7 @@ class PlacesController < ApplicationController
     end
   end
 
-  # GET /search/{params}
+  # GET /places/search?{params}
   def search
     unless params[:lat].nil? or params[:lng].nil?
       @results = {:locations => Yelp.search(params[:lat], params[:lng])}
@@ -82,22 +82,36 @@ class PlacesController < ApplicationController
     end
   end
 
+  # PUT /places/1/rate?{params}
+  def rate
+    @place = Place.find_by(id_yelp: params[:id])
+    @feature = Feature.find_or_initialize_by(user_id: current_user._id, place_id: @place._id)
+    params[:feature].each do |attr, rating|
+      @feature[attr] = rating
+    end
+    @feature.set_user(current_user)
+    @place.features << @feature
+    @feature.save
+    @place.average_features
+    render json: @feature
+  end
+
 
 private
-    def get_latlng_and_features
-      unless @results[:locations].nil?
-        @results[:locations].each do |r|
-          place = Place.find_or_create_by(id_yelp: r.id)
-          if place.latitude.nil? or place.longitude.nil?
-            geocode_address(place, r)
-          end
-          #add latitude, longitude, and features to response object
-          r.latitude = place.latitude
-          r.longitude = place.longitude
-          r.features = place.features
+  def get_latlng_and_features
+    unless @results[:locations].nil?
+      @results[:locations].each do |r|
+        place = Place.find_or_initialize_by(id_yelp: r.id)
+        if place.latitude.nil? or place.longitude.nil?
+          geocode_address(place, r)
         end
+        #add latitude, longitude, and features to response object
+        r.latitude = place.latitude
+        r.longitude = place.longitude
+        r.rating = place.rating
       end
     end
+  end
 
   def geocode_address(place, r)
     #geocode the restaurant address and save lat&lng to database
@@ -105,7 +119,7 @@ private
     unless geo.nil?
       place.latitude = geo.latitude.to_s
       place.longitude = geo.longitude.to_s
-      place.save!
+      place.save
     end
   end
 

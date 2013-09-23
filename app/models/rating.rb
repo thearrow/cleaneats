@@ -1,4 +1,4 @@
-class Feature
+class Rating
   include Mongoid::Document
   field :gluten, type: Float
   field :msg, type: Float
@@ -7,11 +7,6 @@ class Feature
   field :vegetarian, type: Float
   field :paleo, type: Float
   field :low_carb, type: Float
-  belongs_to :place
-  belongs_to :user
-
-  def set_user(user)
-    self.user = user
-  end
+  embedded_in :place
 
 end

@@ -23,16 +23,43 @@ angular.module('cleanEats', ["ngResource", "leaflet-directive"])
                       Imagery © <a href="http://cloudmade.com">CloudMade</a>',
         maxZoom: 18,
         scrollWheelZoom: true
+    $scope.ratings = {}
+    $scope.user = $('#map').data('user')
+
+    $http.defaults.headers.put['X-CSRF-Token']=$('meta[name="csrf-token"]').attr('content')
 
     #bind event to create star ratings on marker click
     $scope.$on 'leafletDirectiveMap.popupopen', (event) ->
-        $('#rating-gluten').raty()
-        $('#rating-msg').raty()
-        $('#rating-dairy').raty()
-        $('#rating-vegan').raty()
-        $('#rating-vegetarian').raty()
-        $('#rating-paleo').raty()
-        $('#rating-lowcarb').raty()
+        #clear ratings
+        $scope.ratings = {}
+        options = {
+            score: () ->
+                $(this).data().score
+            cancel: if $scope.user then true else false,
+            click: (score, evt) ->
+                #save the ratings to the scope
+                attr = $(this).attr('id').substring(7)
+                $scope.ratings[attr] = score
+                #if the user cancelled the rating, remove it
+                if score == null
+                    delete $scope.ratings[attr]
+            readOnly: if $scope.user then false else true
+        }
+        $('#rating-gluten').raty(options)
+        $('#rating-msg').raty(options)
+        $('#rating-dairy').raty(options)
+        $('#rating-vegan').raty(options)
+        $('#rating-vegetarian').raty(options)
+        $('#rating-paleo').raty(options)
+        $('#rating-low_carb').raty(options)
+        unless $scope.user then $('#save-button').hide()
+        if $scope.user then $('#login-to-rate').hide()
+        $('#save-button').click ->
+            place_id = $('#place-id').data().id
+            $http.put("/places/#{place_id}/rate", {feature: $scope.ratings}).success($scope.saveSuccess)
+
+    $scope.saveSuccess = ->
+        alert('Success!')
 
     $scope.doTextSearch = ->
         $scope.isLoading = true
@@ -59,33 +86,41 @@ angular.module('cleanEats', ["ngResource", "leaflet-directive"])
         $scope.showLocationMarkers(data.locations)
 
     $scope.showLocationMarkers = (locations) ->
+        alert
         angular.forEach locations, (r, key) ->
+            place_info =
+                "
+                <div id='place-id' data-id='#{r.id}'></div>
+                <h3>#{r.name}</h3>
+                <p style='width:200px'>
+                    <img src=#{r.rating_img_url}>(#{r.review_count} reviews)<br/>
+                    <a href=#{r.url}>
+                    <img src='http://s3-media3.ak.yelpcdn.com/assets/2/www/img/65526d1a519b/developers/Powered_By_Yelp_Red.png'>
+                    </a>
+                </p>
+                "
+            ratings =
+                "
+                <div style='width:240px; height:140px;'>
+                    <div class='ratings-left' style='float:left; width:50%;'>
+                        Paleo: <div id='rating-paleo' data-score=#{r.rating.paleo}></div>
+                        Low-Carb: <div id='rating-low_carb' data-score=#{r.rating.low_carb}></div>
+                        Vegetarian: <div id='rating-vegetarian' data-score=#{r.rating.vegetarian}></div>
+                        Vegan: <div id='rating-vegan' data-score=#{r.rating.vegan}></div>
+                    </div>
+                    <div class='ratings-right' style='float:right; width:50%;'>
+                        Gluten-Free: <div id='rating-gluten' data-score=#{r.rating.gluten}></div>
+                        MSG-Free: <div id='rating-msg' data-score=#{r.rating.msg}></div>
+                        Dairy-Free: <div id='rating-dairy' data-score=#{r.rating.dairy}></div>
+                        <a class='button' id='save-button' style='margin-top: 5px; color:white;'>Save</a>
+                        <p id='login-to-rate'>Login to Rate!</p>
+                    </div>
+                </div>
+                "
             $scope.markers.push key =
                 lat: parseFloat(r.latitude)
                 lng: parseFloat(r.longitude)
-                message:
-                    "
-                    <h3>#{r.name}</h3>
-                    <p>
-                        <img src=#{r.rating_img_url}>(#{r.review_count} reviews)<br/>
-                        <a href=#{r.url}>
-                         <img src='http://s3-media3.ak.yelpcdn.com/assets/2/www/img/65526d1a519b/developers/Powered_By_Yelp_Red.png'>
-                        </a>
-                    </p>
-                    <div style='width:220px; height:140px;'>
-                        <div class='ratings-left' style='float:left; width:50%;'>
-                            Paleo: <div id='rating-paleo'></div>
-                            Low-Carb: <div id='rating-lowcarb'></div>
-                            Vegetarian: <div id='rating-vegetarian'></div>
-                            Vegan: <div id='rating-vegan'></div>
-                        </div>
-                        <div class='ratings-right' style='float:right; width:50%;'>
-                            Gluten-Free: <div id='rating-gluten'></div>
-                            MSG-Free: <div id='rating-msg'></div>
-                            Dairy-Free: <div id='rating-dairy'></div>
-                        </div>
-                    </div>
-                    "
+                message: place_info + ratings
                 icon: L.AwesomeMarkers.icon getIcon(r)
 
     getIcon = (location) ->

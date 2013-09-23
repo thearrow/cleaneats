@@ -24,7 +24,7 @@ div[ng-app="cleanEats" ng-controller="cleanCtrl"]
         | Loading Results....
   .row.text-center.map
     .large-9.columns
-      #map[ng-show="isSearching"]
+      #map[ng-show="isSearching" data-user="#{current_user}"]
         leaflet[width="100%" height=480 center="center" defaults="mapDefaults" markers="markers" events="events"]
         a.button.prefix[href="" ng-click="redoSearch()"]
           | Redo Search Here
