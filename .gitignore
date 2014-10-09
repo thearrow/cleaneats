@@ -39,3 +39,4 @@ pickle-email-*.html
 **.swp
 cleaneats.sublime-project
 cleaneats.sublime-workspace
+public/dev-assets
