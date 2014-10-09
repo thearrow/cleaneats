@@ -22,5 +22,5 @@ Built With:
 - [Yelp API](http://www.yelp.com/developers/documentation)
 - [Mapquest Geolocation API](http://developer.mapquest.com/web/products/dev-services/geocoding-ws)
 - [Leaflet Maps](http://leafletjs.com)
-- [Cloudmade Map Tiles](http://cloudmade.com)
+- [OpenStreetMap Map Tiles](http://www.openstreetmap.org/)
 - [OmniAuth Facebook Login](https://github.com/mkdynamic/omniauth-facebook)

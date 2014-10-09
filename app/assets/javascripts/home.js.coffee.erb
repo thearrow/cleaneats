@@ -19,14 +19,12 @@ angular.module('cleanEats', ["ngResource", "leaflet-directive"])
     $scope.isLocationError = false
     $scope.locationText = ""
     $scope.mapDefaults =
-        tileLayer: "http://{s}.tile.cloudmade.com/<%= ENV['CLOUDMADE_API_KEY'] %>/997/256/{z}/{x}/{y}.png",
+        tileLayer: "http://{s}.tile.osm.org/{z}/{x}/{y}.png",
         tileLayerOptions:
             opacity: 0.9,
             detectRetina: true,
             reuseTiles: true,
-            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors,
-                      <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>,
-                      Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
         maxZoom: 18,
         scrollWheelZoom: true
     $scope.ratings = {}
